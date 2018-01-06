@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="unipievok" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<!-- Evok API Bridge -->
+	<bridge-type id="bridge">
+		<label>UniPi PLC</label>
+		<description>This bridge represents the UniPi PLC (UniPi or Neuron)</description>
+
+		<properties>
+			<property name="vendor">UniPi</property>
+			<property name="device">Neuron</property>
+			<property name="model">M203</property>
+		</properties>
+		<representation-property>serialNumber</representation-property>
+
+		<config-description>
+			<parameter name="evokApiUrl" type="text">
+				<context>url</context>
+				<label>Evok API URL</label>
+				<description>URL of the Evok API</description>
+				<required>true</required>
+			</parameter>
+			<parameter name="pollingInterval" type="integer" min="1" step="1" unit="s">
+				<label>Polling Interval</label>
+				<description>Seconds between fetching values from the Bridge.</description>
+				<required>true</required>
+				<default>10</default>
+			</parameter>
+		</config-description>
+	</bridge-type>
+
+</thing:thing-descriptions>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="unipievok"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<!-- Relay Channel -->
+    <channel-type id="relay">
+        <item-type>Switch</item-type>
+        <label>Relay</label>
+        <description>The relay channel allows to turn the relay on and off.
+        </description>
+        <category>Switch</category>
+        <tags>
+            <tag>Switchable</tag>
+        </tags>
+    </channel-type>
+
+	<!-- Relay Switch -->
+    <channel-group-type id="relaySwitch">
+        <label>Relay Switch</label>
+        <description>The relay switch channel within switch channel</description>
+        <category>Switch</category>
+        <channels>
+            <channel typeId="relay" id="relay" />
+        </channels>
+    </channel-group-type>
+    
+</thing:thing-descriptions>

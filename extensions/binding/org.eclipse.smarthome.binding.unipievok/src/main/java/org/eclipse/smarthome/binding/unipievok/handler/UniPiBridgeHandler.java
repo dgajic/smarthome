@@ -12,12 +12,13 @@
  */
 package org.eclipse.smarthome.binding.unipievok.handler;
 
-import static org.eclipse.smarthome.binding.unipievok.UniPiEvokBindingConstants.API_URL;
+import static org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants.API_URL;
 
 import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -29,17 +30,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link UniPiPLCBridgeHandler} is responsible for handling commands, which are
+ * The {@link UniPiBridgeHandler} is responsible for handling commands, which are
  * sent to one of the channels.
  *
  * @author Dragan Gajic - Initial contribution
  */
 @NonNullByDefault
-public class UniPiPLCBridgeHandler extends ConfigStatusBridgeHandler {
+public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(UniPiPLCBridgeHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(UniPiBridgeHandler.class);
 
-    public UniPiPLCBridgeHandler(Bridge bridge) {
+    public UniPiBridgeHandler(Bridge bridge) {
         super(bridge);
     }
 
@@ -47,9 +48,9 @@ public class UniPiPLCBridgeHandler extends ConfigStatusBridgeHandler {
     public void initialize() {
         logger.debug("Initialize UniPi PLC");
 
-        final String bridgeIpAddress = (String) getThing().getConfiguration().get(API_URL);
+        final String apiUrl = getAPIUrl();
 
-        if (bridgeIpAddress == null || bridgeIpAddress.isEmpty()) {
+        if (apiUrl == null || apiUrl.isEmpty()) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.CONFIGURATION_ERROR,
                     "@text/offline.conf-error-no-ip-address");
         } else {
@@ -61,6 +62,10 @@ public class UniPiPLCBridgeHandler extends ConfigStatusBridgeHandler {
         }
     }
 
+    private @Nullable String getAPIUrl() {
+        return (String) getThing().getConfiguration().get(API_URL);
+    }
+
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         // TODO Auto-generated method stub
@@ -68,11 +73,11 @@ public class UniPiPLCBridgeHandler extends ConfigStatusBridgeHandler {
 
     @Override
     public Collection<ConfigStatusMessage> getConfigStatus() {
-        final String bridgeIpAddress = (String) getThing().getConfiguration().get(API_URL);
+        final String apiUrl = getAPIUrl();
         Collection<ConfigStatusMessage> configStatusMessages;
 
-        // Check whether an IP address is provided
-        if (bridgeIpAddress == null || bridgeIpAddress.isEmpty()) {
+        // Check whether an Evok URL address is provided
+        if (apiUrl == null || apiUrl.isEmpty()) {
             configStatusMessages = Collections.singletonList(ConfigStatusMessage.Builder.error(API_URL)
                     .withMessageKeySuffix("config-status.error.missing-ip-address-configuration").withArguments(API_URL)
                     .build());

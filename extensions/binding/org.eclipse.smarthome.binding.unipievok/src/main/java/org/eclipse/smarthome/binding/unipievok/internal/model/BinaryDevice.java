@@ -4,8 +4,8 @@ public class BinaryDevice extends Device {
 
     private boolean state;
 
-    public BinaryDevice(String id) {
-        super(id);
+    public BinaryDevice() {
+        super();
     }
 
     public BinaryDevice(String id, boolean state) {

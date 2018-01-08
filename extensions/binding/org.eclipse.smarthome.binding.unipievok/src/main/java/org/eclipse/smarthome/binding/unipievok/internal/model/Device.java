@@ -5,11 +5,15 @@ import java.util.Map;
 
 public abstract class Device {
     private String id;
-    private final Map<String, String> properties;
+    private final Map<String, Object> properties;
+
+    public Device() {
+        this.properties = new HashMap<>();
+    }
 
     public Device(String id) {
+        this();
         this.id = id;
-        this.properties = new HashMap<>();
     }
 
     public Device(String id, Map<String, String> properties) {
@@ -25,11 +29,11 @@ public abstract class Device {
         this.id = id;
     }
 
-    public Map<String, String> getProperties() {
+    public Map<String, Object> getProperties() {
         return properties;
     }
 
-    public void setProperty(String key, String value) {
+    public void setProperty(String key, Object value) {
         properties.put(key, value);
     }
 }

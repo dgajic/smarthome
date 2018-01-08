@@ -14,9 +14,8 @@ package org.eclipse.smarthome.binding.unipievok;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
-import org.eclipse.smarthome.binding.unipievok.handler.UniPiEvokHandler;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ManagedThingProvider;
 import org.eclipse.smarthome.core.thing.ThingProvider;
@@ -29,11 +28,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
-* Tests cases for {@link UniPiEvokHandler}.
-*
-* @author Dragan Gajic - Initial contribution
-*/
-public class UniPiEvokOSGiTest extends JavaOSGiTest {
+ * Tests cases for {@link UniPiEvokHandler}.
+ *
+ * @author Dragan Gajic - Initial contribution
+ */
+public class UniPiBridgeOSGiTest extends JavaOSGiTest {
 
     private static final ThingTypeUID BRIDGE_THING_TYPE_UID = new ThingTypeUID("unipievok", "bridge");
 

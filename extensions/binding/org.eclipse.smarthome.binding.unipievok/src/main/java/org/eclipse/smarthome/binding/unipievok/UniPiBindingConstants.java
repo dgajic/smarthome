@@ -16,13 +16,13 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 /**
- * The {@link UniPiEvokBindingConstants} class defines common constants, which are
+ * The {@link UniPiBindingConstants} class defines common constants, which are
  * used across the whole binding.
  *
  * @author Dragan Gajic - Initial contribution
  */
 @NonNullByDefault
-public class UniPiEvokBindingConstants {
+public class UniPiBindingConstants {
 
     private static final String BINDING_ID = "unipievok";
 

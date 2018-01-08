@@ -13,16 +13,16 @@
 package org.eclipse.smarthome.binding.unipievok;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.eclipse.smarthome.binding.unipievok.handler.UniPiEvokHandler;
-import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.eclipse.smarthome.core.thing.binding.BridgeHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerCallback;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,24 +30,24 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 /**
-* Tests cases for {@link UniPiEvokHandler}. The tests provide mocks for supporting entities using Mockito.
-*
-* @author Dragan Gajic - Initial contribution
-*/
-public class UniPiEvokHandlerTest {
+ * Tests cases for {@link UniPiEvokHandler}. The tests provide mocks for supporting entities using Mockito.
+ *
+ * @author Dragan Gajic - Initial contribution
+ */
+public class UniPiBridgeHandlerTest {
 
-    private ThingHandler handler;
+    private BridgeHandler handler;
 
     @Mock
     private ThingHandlerCallback callback;
 
     @Mock
-    private Thing thing;
+    private Bridge thing;
 
     @Before
     public void setUp() {
         initMocks(this);
-        handler = new UniPiEvokHandler(thing);
+        handler = new UniPiBridgeHandler(thing);
         handler.setCallback(callback);
     }
 

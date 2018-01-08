@@ -5,15 +5,15 @@ import java.util.Map;
 public class Neuron extends Device {
     private String serialNumber;
     private String model;
-    private int circuit;
+    private String circuit;
     private int boardCount;
 
-    private DigitalInputs digitalInputs;
-    private RelayOutputs relayOutputs;
-    private DigitalOutputs digitalOutputs;
+    private DigitalInputs digitalInputs = new DigitalInputs();
+    private RelayOutputs relayOutputs = new RelayOutputs();
+    private DigitalOutputs digitalOutputs = new DigitalOutputs();
 
-    public Neuron(String id) {
-        super(id);
+    public Neuron() {
+        super();
     }
 
     public Neuron(String id, Map<String, String> properties) {
@@ -36,11 +36,11 @@ public class Neuron extends Device {
         this.model = model;
     }
 
-    public int getCircuit() {
+    public String getCircuit() {
         return circuit;
     }
 
-    public void setCircuit(int circuit) {
+    public void setCircuit(String circuit) {
         this.circuit = circuit;
     }
 
@@ -74,5 +74,13 @@ public class Neuron extends Device {
 
     public void setDigitalOutputs(DigitalOutputs digitalOutputs) {
         this.digitalOutputs = digitalOutputs;
+    }
+
+    public void simpleCopy(Neuron neuron) {
+        this.setId(neuron.getId());
+        this.serialNumber = neuron.serialNumber;
+        this.boardCount = neuron.boardCount;
+        this.circuit = neuron.circuit;
+        this.model = neuron.model;
     }
 }

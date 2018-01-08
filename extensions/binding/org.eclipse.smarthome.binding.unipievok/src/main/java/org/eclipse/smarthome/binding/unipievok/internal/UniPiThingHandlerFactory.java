@@ -17,12 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.binding.unipievok.UniPiEvokBindingConstants;
-import org.eclipse.smarthome.binding.unipievok.handler.UniPiPLCBridgeHandler;
-import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -34,7 +32,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * The {@link UniPiPLCThingHandlerFactory} is responsible for creating things and thing
+ * The {@link UniPiThingHandlerFactory} is responsible for creating things and thing
  * handlers. This factory also creates discovery service for UniPiPLC bridge which will
  * be used to register all available devices.
  *
@@ -42,13 +40,13 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = ThingHandlerFactory.class, immediate = true, configurationPid = "binding.unipievok")
 @NonNullByDefault
-public class UniPiPLCThingHandlerFactory extends BaseThingHandlerFactory {
+public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
 
     // Holds discovery services registered for handler so we can remove them when handler is removed
     private final Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegistry = new HashMap<>();
 
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .singleton(UniPiEvokBindingConstants.THING_TYPE_BRIDGE);
+            .singleton(UniPiBindingConstants.THING_TYPE_BRIDGE);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -56,19 +54,12 @@ public class UniPiPLCThingHandlerFactory extends BaseThingHandlerFactory {
     }
 
     @Override
-    public @Nullable Thing createThing(@NonNull ThingTypeUID thingTypeUID, @NonNull Configuration configuration,
-            @Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
-        // TODO Auto-generated method stub
-        return super.createThing(thingTypeUID, configuration, thingUID, null);
-    }
-
-    @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (thingTypeUID.equals(UniPiEvokBindingConstants.THING_TYPE_BRIDGE)) {
+        if (thingTypeUID.equals(UniPiBindingConstants.THING_TYPE_BRIDGE)) {
             registerDiscoveryService();
-            return new UniPiPLCBridgeHandler((Bridge) thing);
+            return new UniPiBridgeHandler((Bridge) thing);
         }
 
         return null;

@@ -3,14 +3,14 @@ package org.eclipse.smarthome.binding.unipievok.internal.model;
 import java.util.Map;
 
 public class Neuron extends Device {
-    private String serialNumber;
+    private Integer serialNumber;
     private String model;
     private String circuit;
-    private int boardCount;
+    private Integer boardCount;
 
-    private DigitalInputs digitalInputs = new DigitalInputs();
-    private RelayOutputs relayOutputs = new RelayOutputs();
-    private DigitalOutputs digitalOutputs = new DigitalOutputs();
+    private MultiBinaryDevices<DigitalnputDevice> digitalInputs = new MultiBinaryDevices<>("digitalInputs");
+    private MultiBinaryDevices<RelayOutputDevice> relayOutputs = new MultiBinaryDevices<>("relayOutputs");
+    private MultiBinaryDevices<DigitalOutputDevice> digitalOutputs = new MultiBinaryDevices<>("digitalOutputs");
 
     public Neuron() {
         super();
@@ -20,11 +20,11 @@ public class Neuron extends Device {
         super(id, properties);
     }
 
-    public String getSerialNumber() {
+    public Integer getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
+    public void setSerialNumber(Integer serialNumber) {
         this.serialNumber = serialNumber;
     }
 
@@ -44,35 +44,35 @@ public class Neuron extends Device {
         this.circuit = circuit;
     }
 
-    public int getBoardCount() {
+    public Integer getBoardCount() {
         return boardCount;
     }
 
-    public void setBoardCount(int boardCount) {
+    public void setBoardCount(Integer boardCount) {
         this.boardCount = boardCount;
     }
 
-    public DigitalInputs getDigitalInputs() {
+    public MultiBinaryDevices<DigitalnputDevice> getDigitalInputs() {
         return digitalInputs;
     }
 
-    public void setDigitalInputs(DigitalInputs digitalInputs) {
+    public void setDigitalInputs(MultiBinaryDevices<DigitalnputDevice> digitalInputs) {
         this.digitalInputs = digitalInputs;
     }
 
-    public RelayOutputs getRelayOutputs() {
+    public MultiBinaryDevices<RelayOutputDevice> getRelayOutputs() {
         return relayOutputs;
     }
 
-    public void setRelayOutputs(RelayOutputs relayOutputs) {
+    public void setRelayOutputs(MultiBinaryDevices<RelayOutputDevice> relayOutputs) {
         this.relayOutputs = relayOutputs;
     }
 
-    public DigitalOutputs getDigitalOutputs() {
+    public MultiBinaryDevices<DigitalOutputDevice> getDigitalOutputs() {
         return digitalOutputs;
     }
 
-    public void setDigitalOutputs(DigitalOutputs digitalOutputs) {
+    public void setDigitalOutputs(MultiBinaryDevices<DigitalOutputDevice> digitalOutputs) {
         this.digitalOutputs = digitalOutputs;
     }
 

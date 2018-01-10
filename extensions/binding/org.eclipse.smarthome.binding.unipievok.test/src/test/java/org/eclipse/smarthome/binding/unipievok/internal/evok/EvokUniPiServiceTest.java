@@ -21,4 +21,5 @@ public class EvokUniPiServiceTest {
         Neuron neuron = evokService.getState();
         assertNotNull(neuron);
     }
+
 }

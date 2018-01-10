@@ -1,10 +1,14 @@
 package org.eclipse.smarthome.binding.unipievok.internal.evok;
 
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiServiceException;
 import org.eclipse.smarthome.binding.unipievok.internal.model.BinaryDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalOutputDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalnputDevice;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
+import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutputDevice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,8 +25,14 @@ public class GsonNeuronStateParser implements NeuronStateParser {
     private final Gson gson;
 
     public GsonNeuronStateParser() {
-        gson = new GsonBuilder().registerTypeAdapter(Neuron.class, new NeuronDeserializer())
-                .registerTypeAdapter(BinaryDevice.class, new BinaryDeviceDeserializer()).create();
+        // @formatter:off
+        gson = new GsonBuilder()
+                .registerTypeAdapter(Neuron.class, new NeuronDeserializer())
+                .registerTypeAdapter(DigitalnputDevice.class, new BinaryDeviceDeserializer<DigitalnputDevice>())
+                .registerTypeAdapter(DigitalOutputDevice.class, new BinaryDeviceDeserializer<DigitalOutputDevice>())
+                .registerTypeAdapter(RelayOutputDevice.class, new BinaryDeviceDeserializer<RelayOutputDevice>())
+                .create();
+        // @formatter:on
     }
 
     @Override
@@ -33,6 +43,9 @@ public class GsonNeuronStateParser implements NeuronStateParser {
             JsonElement element = parser.parse(json);
             JsonObject root = element.getAsJsonObject();
             JsonArray data = root.getAsJsonArray("data");
+
+            // validate
+
             Neuron neuron = new Neuron();
 
             data.forEach(e -> {
@@ -43,14 +56,14 @@ public class GsonNeuronStateParser implements NeuronStateParser {
                         neuron.simpleCopy(gson.fromJson(device, Neuron.class));
                         break;
                     case "input":
-                        neuron.getDigitalInputs().addDevice(gson.fromJson(device, BinaryDevice.class));
+                        neuron.getDigitalInputs().addDevice(gson.fromJson(device, DigitalnputDevice.class));
                         break;
                     case "relay":
-                        BinaryDevice bdev = gson.fromJson(device, BinaryDevice.class);
-                        if ("physical".equals(device.get("relay_type").getAsString())) {
-                            neuron.getRelayOutputs().addDevice(bdev);
-                        } else if ("digital".equals(device.get("relay_type").getAsString())) {
-                            neuron.getDigitalOutputs().addDevice(bdev);
+                        String type = device.get("relay_type").getAsString();
+                        if ("physical".equals(type)) {
+                            neuron.getRelayOutputs().addDevice(gson.fromJson(device, RelayOutputDevice.class));
+                        } else if ("digital".equals(type)) {
+                            neuron.getDigitalOutputs().addDevice(gson.fromJson(device, DigitalOutputDevice.class));
                         }
                         break;
                 }
@@ -72,44 +85,48 @@ public class GsonNeuronStateParser implements NeuronStateParser {
             JsonObject obj = el.getAsJsonObject();
 
             Neuron neuron = new Neuron();
-            neuron.setId(obj.get("sn").getAsString());
-            neuron.setModel(obj.get("model").getAsString());
-            neuron.setSerialNumber(obj.get("sn").getAsString());
+            neuron.setId(obj.get("circuit").getAsString());
             neuron.setCircuit(obj.get("circuit").getAsString());
-            neuron.setBoardCount(obj.get("board_count").getAsInt());
+            neuron.setGlobDevId(obj.get("glob_dev_id").getAsInt());
+
+            Optional.ofNullable(obj.get("model")).ifPresent(v -> neuron.setModel(v.getAsString()));
+            Optional.ofNullable(obj.get("sn")).ifPresent(v -> neuron.setSerialNumber(v.getAsInt()));
+            Optional.ofNullable(obj.get("board_count")).ifPresent(v -> neuron.setBoardCount(v.getAsInt()));
 
             return neuron;
         }
 
     }
 
-    static class BinaryDeviceDeserializer implements JsonDeserializer<BinaryDevice> {
+    static class BinaryDeviceDeserializer<T extends BinaryDevice> implements JsonDeserializer<T> {
 
         @Override
-        public BinaryDevice deserialize(JsonElement el, Type type, JsonDeserializationContext ctx)
-                throws JsonParseException {
-            JsonObject obj = el.getAsJsonObject();
+        public T deserialize(JsonElement el, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+            try {
+                @SuppressWarnings("unchecked")
+                T bdev = (T) type.getClass().newInstance();
+                JsonObject obj = el.getAsJsonObject();
 
-            BinaryDevice bdev = new BinaryDevice();
-            bdev.setId(obj.get("circuit").getAsString());
-            bdev.set(obj.get("value").getAsInt() != 0);
-            bdev.setProperty("mode", obj.get("mode").getAsString());
-            bdev.setProperty("glob_dev_id", obj.get("glob_dev_id").getAsString());
+                bdev.setId(obj.get("circuit").getAsString());
+                bdev.set(obj.get("value").getAsInt() != 0);
+                bdev.setGlobDevId(obj.get("glob_dev_id").getAsInt());
+                Optional.ofNullable(obj.get("mode")).ifPresent(v -> bdev.setProperty("mode", v.getAsString()));
 
-            switch (obj.get("dev").getAsString()) {
-                case "input":
-                    bdev.setProperty("debounce", obj.get("debounce").getAsInt());
-                    bdev.setProperty("counter", obj.get("counter").getAsInt());
-                    bdev.setProperty("counter_mode", obj.get("counter_mode").getAsString());
-                    break;
-                case "relay":
-                    bdev.setProperty("pending", obj.get("pending").getAsBoolean());
-
+                switch (type.getTypeName()) {
+                    case "input":
+                        bdev.setProperty("debounce", obj.get("debounce").getAsInt());
+                        bdev.setProperty("counter_mode", obj.get("counter_mode").getAsString());
+                        Optional.ofNullable(obj.get("counter"))
+                                .ifPresent(v -> bdev.setProperty("counter", v.getAsString()));
+                        break;
+                    case "relay":
+                        bdev.setProperty("pending", obj.get("pending").getAsBoolean());
+                        break;
+                }
+                return bdev;
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new JsonParseException(e);
             }
-
-            return bdev;
         }
-
     }
-
 }

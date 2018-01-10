@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class MultiBinaryDevices extends Device {
-    private final Map<String, BinaryDevice> devices = new ConcurrentHashMap<>();
+public class MultiBinaryDevices<T extends BinaryDevice> extends Device {
+    private final Map<String, T> devices = new ConcurrentHashMap<>();
 
     public MultiBinaryDevices(String id, Map<String, String> properties) {
         super(id, properties);
@@ -16,11 +16,11 @@ public abstract class MultiBinaryDevices extends Device {
         super(id);
     }
 
-    public Collection<BinaryDevice> getDevices() {
+    public Collection<T> getDevices() {
         return Collections.unmodifiableCollection(devices.values());
     }
 
-    public void addDevice(BinaryDevice device) {
+    public void addDevice(T device) {
         devices.put(device.getId(), device);
     }
 
@@ -28,8 +28,8 @@ public abstract class MultiBinaryDevices extends Device {
         devices.remove(id);
     }
 
-    private BinaryDevice getOrThrow(String id) {
-        BinaryDevice device = devices.get(id);
+    private T getOrThrow(String id) {
+        T device = devices.get(id);
         if (device != null) {
             return device;
         } else {

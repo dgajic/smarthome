@@ -1,6 +1,6 @@
 package org.eclipse.smarthome.binding.unipievok.internal.model;
 
-public class BinaryDevice extends Device {
+public abstract class BinaryDevice extends Device {
 
     private boolean state;
 

@@ -5,6 +5,7 @@ import java.util.Map;
 
 public abstract class Device {
     private String id;
+    private int globDevId;
     private final Map<String, Object> properties;
 
     public Device() {
@@ -36,4 +37,17 @@ public abstract class Device {
     public void setProperty(String key, Object value) {
         properties.put(key, value);
     }
+
+    public Object getProperty(String key) {
+        return properties.get(key);
+    }
+
+    public int getGlobDevId() {
+        return globDevId;
+    }
+
+    public void setGlobDevId(int globDevId) {
+        this.globDevId = globDevId;
+    }
+
 }

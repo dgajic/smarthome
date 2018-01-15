@@ -2,21 +2,24 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import java.io.IOException;
 
-import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalnputDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
 
 import com.google.gson.stream.JsonReader;
 
-public class DigitalInputDeviceTypeAdapter extends BinaryDeviceTypeAdapter<DigitalnputDevice> {
+public class DigitalInputTypeAdapter extends DeviceTypeAdapter<Digitalnput> {
 
     @Override
-    protected DigitalnputDevice create() {
-        return new DigitalnputDevice();
+    protected Digitalnput create() {
+        return new Digitalnput();
     }
 
     @Override
-    protected boolean handleAdditionalField(JsonReader reader, String name, DigitalnputDevice dev) throws IOException {
+    protected boolean handleAdditionalField(JsonReader reader, String name, Digitalnput dev) throws IOException {
         boolean set = true;
         switch (name) {
+            case "value":
+                dev.set(reader.nextInt() != 0);
+                break;
             case "debounce":
                 dev.setDebounce(reader.nextInt());
                 break;

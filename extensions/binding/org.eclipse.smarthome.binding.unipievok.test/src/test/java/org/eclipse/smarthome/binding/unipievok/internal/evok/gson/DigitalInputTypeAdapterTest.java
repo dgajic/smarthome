@@ -2,19 +2,19 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import static org.junit.Assert.*;
 
-import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalOutputDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class DigitalOutputDeviceTypeAdapterTest {
+public class DigitalInputTypeAdapterTest {
     private Gson gson;
 
     @Before
     public void setUp() {
-        gson = new GsonBuilder().registerTypeAdapter(DigitalOutputDevice.class, new DigitalOutputDeviceTypeAdapter())
+        gson = new GsonBuilder().registerTypeAdapter(Digitalnput.class, new DigitalInputTypeAdapter())
                 .create();
     }
 
@@ -25,30 +25,29 @@ public class DigitalOutputDeviceTypeAdapterTest {
                 "\"glob_dev_id\": 1," +
                 "\"modes\": [" +
                 "\"Simple\"," +
-                "\"PWM\"" +
+                "\"DirectSwitch\"" +
                 "]," +
                 "\"value\": 0," +
                 "\"circuit\": \"1_01\"," +
-                "\"alias\": \"al_lights_kitchen\"," +
-                "\"pending\": true," +
-                "\"relay_type\": \"digital\"," +
-                "\"dev\": \"relay\"," +
+                "\"debounce\": 50," +
+                "\"counter\": 0," +
+                "\"counter_mode\": \"Enabled\"," +
+                "\"dev\": \"input\"," +
                 "\"mode\": \"Simple\"" +
                 "}";
-        // @formatter:on
+            // @formatter:on
 
-        DigitalOutputDevice dev = gson.fromJson(json, DigitalOutputDevice.class);
+        Digitalnput dev = gson.fromJson(json, Digitalnput.class);
         assertNotNull(dev);
 
         assertEquals("1_01", dev.getId());
         assertEquals(1, dev.getGlobDevId());
         assertEquals(false, dev.isSet());
-        assertEquals(true, dev.isPending());
-        assertEquals(4, dev.getProperties().size());
-        assertEquals("relay", dev.getProperty("dev"));
+        assertEquals(50, dev.getDebounce());
+        assertEquals(Integer.valueOf(0), dev.getCounter());
+        assertEquals(2, dev.getProperties().size());
+        assertEquals("input", dev.getProperty("dev"));
         assertEquals("Simple", dev.getProperty("mode"));
-        assertEquals("al_lights_kitchen", dev.getProperty("alias"));
-        assertEquals("digital", dev.getProperty("relay_type"));
 
     }
 }

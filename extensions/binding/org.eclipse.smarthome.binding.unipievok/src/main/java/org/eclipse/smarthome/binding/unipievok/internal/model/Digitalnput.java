@@ -1,6 +1,6 @@
 package org.eclipse.smarthome.binding.unipievok.internal.model;
 
-public class DigitalnputDevice extends BinaryDevice {
+public class Digitalnput extends BinaryDevice {
     private int debounce;
     private Integer counter;
     private String counterMode;

@@ -2,14 +2,13 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import java.io.IOException;
 
-import org.eclipse.smarthome.binding.unipievok.internal.model.BinaryDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-public abstract class BinaryDeviceTypeAdapter<T extends BinaryDevice> extends TypeAdapter<T> {
+public abstract class DeviceTypeAdapter<T extends Device> extends TypeAdapter<T> {
 
     /**
      *
@@ -27,22 +26,25 @@ public abstract class BinaryDeviceTypeAdapter<T extends BinaryDevice> extends Ty
                 case "glob_dev_id":
                     dev.setGlobDevId(reader.nextInt());
                     break;
-                case "value":
-                    dev.set(reader.nextInt() != 0);
-                    break;
                 case "circuit":
                     dev.setId(reader.nextString());
                     break;
                 default:
                     if (!handleAdditionalField(reader, name, dev)) {
                         // if additional field NOT handled then put it as property (only if number, string or boolean)
-                        JsonToken token = reader.peek();
-                        if (token.equals(JsonToken.NUMBER) || token.equals(JsonToken.STRING)
-                                || token.equals(JsonToken.BOOLEAN)) {
-                            dev.setProperty(name, reader.nextString());
-                        } else {
-                            // if not value property, then skip
-                            reader.skipValue();
+                        switch (reader.peek()) {
+                            case BOOLEAN:
+                                dev.setProperty(name, reader.nextBoolean());
+                                break;
+                            case STRING:
+                                dev.setProperty(name, reader.nextString());
+                                break;
+                            case NUMBER:
+                                dev.setProperty(name, reader.nextDouble());
+                                break;
+                            default:
+                                reader.skipValue();
+                                break;
                         }
                     }
                     break;
@@ -67,6 +69,5 @@ public abstract class BinaryDeviceTypeAdapter<T extends BinaryDevice> extends Ty
     @Override
     public void write(JsonWriter writer, T dev) throws IOException {
         // TODO Auto-generated method stub
-
     }
 }

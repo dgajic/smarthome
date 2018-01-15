@@ -1,6 +1,6 @@
 package org.eclipse.smarthome.binding.unipievok.internal.model;
 
-public class DigitalOutputDevice extends BinaryDevice {
+public class DigitalOutput extends BinaryDevice {
     private boolean pending;
 
     public boolean isPending() {

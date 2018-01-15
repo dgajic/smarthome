@@ -2,19 +2,19 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import static org.junit.Assert.*;
 
-import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutputDevice;
+import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class RealyOutputDeviceTypeAdapterTest {
+public class RealyOutputTypeAdapterTest {
     private Gson gson;
 
     @Before
     public void setUp() {
-        gson = new GsonBuilder().registerTypeAdapter(RelayOutputDevice.class, new RelayOutputDeviceTypeAdapter())
+        gson = new GsonBuilder().registerTypeAdapter(RelayOutput.class, new RelayOutputTypeAdapter())
                 .create();
     }
 
@@ -35,7 +35,7 @@ public class RealyOutputDeviceTypeAdapterTest {
                 "}";
         // @formatter:on
 
-        RelayOutputDevice dev = gson.fromJson(json, RelayOutputDevice.class);
+        RelayOutput dev = gson.fromJson(json, RelayOutput.class);
         assertNotNull(dev);
 
         assertEquals("2_01", dev.getId());

@@ -2,7 +2,9 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
+import java.util.Collection;
+
+import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,15 +13,14 @@ public class EvokUniPiServiceTest {
     private EvokUniPiService evokService;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         evokService = new EvokUniPiService("http://192.168.1.104:88");
-        evokService.initialize();
     }
 
     @Test
     public void getStateTest() throws Exception {
-        Neuron neuron = evokService.getState();
-        assertNotNull(neuron);
+        Collection<Device> devices = evokService.getState();
+        assertNotNull(devices);
     }
 
 }

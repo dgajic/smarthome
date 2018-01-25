@@ -32,7 +32,7 @@ public class EvokUniPiService implements UniPiService {
 
     private String url;
 
-    public EvokUniPiService(String url) throws Exception {
+    public EvokUniPiService(String url) {
         this.url = url;
         // @formatter:off
         gson = new GsonBuilder()
@@ -45,11 +45,14 @@ public class EvokUniPiService implements UniPiService {
                 }.getType(), new CompleteStateDeserializer())
                 .create();
         // @formatter:on
-        httpClient.start();
     }
 
     @Override
-    public Collection<Device> getState() {
+    public Device[] getState() {
+        if (!httpClient.isStarted()) {
+            throw new UniPiServiceException("HTTP client is not started");
+        }
+
         try {
             ContentResponse response = httpClient.GET(url + "/rest/all");
 
@@ -72,5 +75,17 @@ public class EvokUniPiService implements UniPiService {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public void initialize() throws Exception {
+        httpClient.start();
+    }
+
+    @Override
+    public void dispose() throws Exception {
+        if (httpClient.isStarted()) {
+            httpClient.stop();
+        }
     }
 }

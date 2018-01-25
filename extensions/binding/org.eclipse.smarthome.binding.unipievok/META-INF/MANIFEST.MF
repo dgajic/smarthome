@@ -15,14 +15,10 @@ Import-Package:
  com.google.gson.reflect;version="2.7.0",
  com.google.gson.stream;version="2.7.0",
  org.eclipse.jdt.annotation;resolution:=optional,
- org.eclipse.jetty.client;version="9.3.15",
+ org.eclipse.jetty.client;version="[9.3.15,9.3.15]",
  org.eclipse.jetty.http;version="[9.3.15,9.3.15]",
- org.eclipse.jetty.io;version="[9.3.15,9.3.15]",
- org.eclipse.jetty.util;version="[9.3.15,9.3.15]",
- org.eclipse.jetty.util.component;version="9.3.15",
  org.eclipse.smarthome.binding.unipievok,
  org.eclipse.smarthome.binding.unipievok.handler,
- org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.config.core.status,
  org.eclipse.smarthome.config.discovery,
  org.eclipse.smarthome.core.library.types,
@@ -31,8 +27,9 @@ Import-Package:
  org.eclipse.smarthome.core.thing.binding.builder,
  org.eclipse.smarthome.core.thing.type,
  org.eclipse.smarthome.core.types,
- org.eclipse.smarthome.io.net.http,
- org.osgi.framework;version="1.8.0",
  org.slf4j
 Service-Component: OSGI-INF/*.xml
-Require-Bundle: org.eclipse.jetty.client
+Require-Bundle: org.eclipse.jetty.client;bundle-version="9.3.15",
+ org.eclipse.osgi,
+ org.eclipse.smarthome.config.core,
+ org.eclipse.jetty.util;bundle-version="9.3.15"

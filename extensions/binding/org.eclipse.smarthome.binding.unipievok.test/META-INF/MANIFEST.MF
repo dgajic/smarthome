@@ -9,7 +9,7 @@ Export-Package: org.eclipse.smarthome.binding.unipievok;uses:="org.eclipse.smart
 Fragment-Host: org.eclipse.smarthome.binding.unipievok
 Import-Package: 
  org.eclipse.jdt.annotation;resolution:=optional,
- org.eclipse.jetty.io;version="9.3.15",
+ org.eclipse.jetty.io;version="[9.3.15,9.3.15]",
  org.eclipse.jetty.util;version="[9.3.15,9.3.15]",
  org.eclipse.smarthome.binding.unipievok,
  org.eclipse.smarthome.binding.unipievok.handler,

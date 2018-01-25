@@ -37,10 +37,11 @@ public class TemperatureSensorTypeAdapterTest {
         assertNotNull(sen);
 
         assertEquals("289679B809000080", sen.getId());
-        assertEquals(Integer.valueOf(15), sen.getInterval());
-        assertEquals(8.8, sen.getValue());
-        assertEquals("289679B809000080", sen.getAddress());
-        assertEquals("DS18B20", sen.getTyp());
+        assertEquals(Double.valueOf(8.8), sen.getValue());
+        assertEquals("289679B809000080", sen.getProperty("address"));
+        assertEquals(15.0, sen.getProperty("interval"));
+        assertEquals("DS18B20", sen.getProperty("typ"));
+        assertEquals("temp", sen.getProperty("dev"));
 
     }
 }

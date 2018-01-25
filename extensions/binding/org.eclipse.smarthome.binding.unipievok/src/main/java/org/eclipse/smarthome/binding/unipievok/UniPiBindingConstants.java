@@ -14,6 +14,7 @@ package org.eclipse.smarthome.binding.unipievok;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.thing.type.ChannelTypeUID;
 
 /**
  * The {@link UniPiBindingConstants} class defines common constants, which are
@@ -24,28 +25,19 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 @NonNullByDefault
 public class UniPiBindingConstants {
 
-    private static final String BINDING_ID = "unipievok";
+    public static final String BINDING_ID = "unipievok";
 
     // bridge
     public static final ThingTypeUID THING_TYPE_BRIDGE = new ThingTypeUID(BINDING_ID, "bridge");
 
     // generic thing types
-    public static final ThingTypeUID THING_TYPE_RELAY = new ThingTypeUID(BINDING_ID, "relay");
-    public static final ThingTypeUID THING_TYPE_TEMPERATURE_SENSOR = new ThingTypeUID(BINDING_ID, "temperature");
-    public static final ThingTypeUID THING_TYPE_DIGITAL_INPUT = new ThingTypeUID(BINDING_ID, "digitalInput");
+    public static final ThingTypeUID THING_TYPE_TEMPERATURE_SENSOR = new ThingTypeUID(BINDING_ID, "temperatureSensor");
 
-    // List of all Channel ids
-    public static final String CHANNEL_RELAY = "relay";
-    public static final String CHANNEL_TEMPERATURE = "temp";
-    public static final String CHANNEL_DIGITAL_INPUT = "dinput";
+    public static final ChannelTypeUID TEMP_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "temperature");
 
     // Bridge config properties
     public static final String API_URL = "evokApiUrl";
     public static final String SERIAL_NUMBER = "serialNumber";
     public static final String POLLING_INTERVAL = "pollingInterval";
-
-    // Light config properties
-    public static final String CIRCUIT = "circuit";
-    public static final String TYPE = "type";
 
 }

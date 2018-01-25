@@ -12,23 +12,26 @@
  */
 package org.eclipse.smarthome.binding.unipievok.internal;
 
+import static org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants.*;
+
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiSensorsHandler;
+import org.eclipse.smarthome.binding.unipievok.internal.discovery.UniPiDiscoveryService;
+import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -42,11 +45,8 @@ import org.osgi.service.component.annotations.Component;
 @NonNullByDefault
 public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
 
-    // Holds discovery services registered for handler so we can remove them when handler is removed
-    private final Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegistry = new HashMap<>();
-
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .singleton(UniPiBindingConstants.THING_TYPE_BRIDGE);
+            .unmodifiableSet(new HashSet<>(Arrays.asList(THING_TYPE_BRIDGE, THING_TYPE_TEMPERATURE_SENSOR)));
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -57,15 +57,15 @@ public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (thingTypeUID.equals(UniPiBindingConstants.THING_TYPE_BRIDGE)) {
-            registerDiscoveryService();
-            return new UniPiBridgeHandler((Bridge) thing);
+        if (THING_TYPE_BRIDGE.equals(thingTypeUID)) {
+            UniPiBridgeHandler bridgeHandler = new UniPiBridgeHandler((Bridge) thing);
+            bundleContext.registerService(DiscoveryService.class.getName(),
+                    new UniPiDiscoveryService(bridgeHandler, 10), new Hashtable<String, Object>());
+            return bridgeHandler;
+        } else if (THING_TYPE_TEMPERATURE_SENSOR.equals(thingTypeUID)) {
+            UniPiSensorsHandler sensorsHandler = new UniPiSensorsHandler(thing);
+            return sensorsHandler;
         }
-
         return null;
-    }
-
-    private void registerDiscoveryService() {
-
     }
 }

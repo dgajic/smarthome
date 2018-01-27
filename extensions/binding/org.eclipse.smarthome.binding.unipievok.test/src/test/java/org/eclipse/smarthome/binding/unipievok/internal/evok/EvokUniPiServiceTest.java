@@ -13,7 +13,7 @@ public class EvokUniPiServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        evokService = new EvokUniPiService("192.168.1.104:88");
+        evokService = new EvokUniPiService("http://192.168.1.104:88");
         evokService.initialize();
     }
 

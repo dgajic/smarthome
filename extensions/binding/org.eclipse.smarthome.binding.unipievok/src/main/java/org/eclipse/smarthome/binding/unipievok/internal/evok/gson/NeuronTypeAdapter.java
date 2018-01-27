@@ -1,10 +1,6 @@
 package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
-import java.io.IOException;
-
 import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
-
-import com.google.gson.stream.JsonReader;
 
 public class NeuronTypeAdapter extends DeviceTypeAdapter<Neuron> {
 
@@ -14,22 +10,19 @@ public class NeuronTypeAdapter extends DeviceTypeAdapter<Neuron> {
     }
 
     @Override
-    protected boolean handleAdditionalField(JsonReader reader, String name, Neuron dev) throws IOException {
-        boolean set = true;
-        switch (name) {
-            case "sn":
-                dev.setSerialNumber(reader.nextInt());
-                break;
-            case "model":
-                dev.setModel(reader.nextString());
-                break;
-            case "board_count":
-                dev.setBoardCount(reader.nextInt());
-                break;
-            default:
-                set = false;
-                break;
-        }
-        return set;
+    protected void registerAdditionalHandlers() {
+        registerHandler("sn", (dev, reader) -> {
+            dev.setSerialNumber(reader.nextInt());
+        });
+
+        registerHandler("model", (dev, reader) -> {
+            dev.setModel(reader.nextString());
+        });
+
+        registerHandler("board_count", (dev, reader) -> {
+            dev.setBoardCount(reader.nextInt());
+        });
+
     }
+
 }

@@ -30,7 +30,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.EvokUniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
-import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
 import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -91,7 +90,7 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
 
             // notify listeners
 
-            Optional.ofNullable(update.get(Sensor.class)).ifPresent(devs -> {
+            Optional.ofNullable(update.get(TemperatureSensor.class)).ifPresent(devs -> {
                 devs.stream().forEach(dev -> Optional.ofNullable(tempUpdateListeners.get(dev.getId()))
                         .ifPresent(ul -> ul.onUpdate((TemperatureSensor) dev)));
             });

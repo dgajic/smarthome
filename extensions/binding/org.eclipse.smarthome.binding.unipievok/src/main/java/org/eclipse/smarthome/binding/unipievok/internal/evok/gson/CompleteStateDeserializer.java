@@ -6,9 +6,10 @@ import java.util.stream.StreamSupport;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalOutput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Ds2438MultiSensor;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
 import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
-import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
+import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -43,7 +44,12 @@ public class CompleteStateDeserializer implements JsonDeserializer<Device[]> {
                     }
                     break;
                 case "temp":
-                    dev = ctx.deserialize(obj, Sensor.class);
+                    String typ = safeGet(obj.get("typ"));
+                    if ("DS18B20".equals(typ)) {
+                        dev = ctx.deserialize(obj, TemperatureSensor.class);
+                    } else if ("DS2438".equals(typ)) {
+                        dev = ctx.deserialize(obj, Ds2438MultiSensor.class);
+                    }
                     break;
             }
             return dev;

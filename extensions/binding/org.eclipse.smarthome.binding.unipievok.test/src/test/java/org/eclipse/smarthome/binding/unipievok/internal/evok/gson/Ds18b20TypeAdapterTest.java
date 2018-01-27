@@ -9,12 +9,12 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class TemperatureSensorTypeAdapterTest {
+public class Ds18b20TypeAdapterTest {
     private Gson gson;
 
     @Before
     public void setUp() {
-        gson = new GsonBuilder().registerTypeAdapter(TemperatureSensor.class, new TemperatureSensorTypeAdapter())
+        gson = new GsonBuilder().registerTypeAdapter(TemperatureSensor.class, new Ds18b20TypeAdapter())
                 .create();
     }
 

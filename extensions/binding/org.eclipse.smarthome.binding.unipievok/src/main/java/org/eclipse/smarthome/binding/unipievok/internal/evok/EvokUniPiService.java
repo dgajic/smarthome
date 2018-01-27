@@ -11,12 +11,14 @@ import org.eclipse.smarthome.binding.unipievok.internal.UniPiServiceException;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.CompleteStateDeserializer;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.DigitalInputTypeAdapter;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.DigitalOutputTypeAdapter;
+import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.Ds18b20TypeAdapter;
+import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.Ds2438TypeAdapter;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.NeuronTypeAdapter;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.RelayOutputTypeAdapter;
-import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.TemperatureSensorTypeAdapter;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalOutput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Ds2438MultiSensor;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
 import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
@@ -40,7 +42,8 @@ public class EvokUniPiService implements UniPiService {
                 .registerTypeAdapter(DigitalOutput.class, new DigitalOutputTypeAdapter())
                 .registerTypeAdapter(RelayOutput.class, new RelayOutputTypeAdapter())
                 .registerTypeAdapter(Neuron.class, new NeuronTypeAdapter())
-                .registerTypeAdapter(TemperatureSensor.class, new TemperatureSensorTypeAdapter())
+                .registerTypeAdapter(TemperatureSensor.class, new Ds18b20TypeAdapter())
+                .registerTypeAdapter(Ds2438MultiSensor.class, new Ds2438TypeAdapter())
                 .registerTypeAdapter(new TypeToken<Collection<Device>>() {
                 }.getType(), new CompleteStateDeserializer())
                 .create();

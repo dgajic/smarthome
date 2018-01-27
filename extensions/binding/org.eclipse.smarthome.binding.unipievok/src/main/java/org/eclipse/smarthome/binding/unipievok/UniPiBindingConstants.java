@@ -35,9 +35,14 @@ public class UniPiBindingConstants {
 
     public static final ChannelTypeUID TEMP_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "temperature");
 
-    // Bridge config properties
+    // bridge config properties
     public static final String API_URL = "evokApiUrl";
     public static final String SERIAL_NUMBER = "serialNumber";
     public static final String POLLING_INTERVAL = "pollingInterval";
+
+    // sensor field name constants
+    public static final String TEMPERATURE = "temp";
+    public static final String HUMIDITY = "humidity";
+    public static final String ILLUMINANCE = "illuminance";
 
 }

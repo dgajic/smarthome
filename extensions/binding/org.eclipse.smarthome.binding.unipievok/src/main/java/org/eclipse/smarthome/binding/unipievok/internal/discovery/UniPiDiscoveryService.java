@@ -1,6 +1,6 @@
 package org.eclipse.smarthome.binding.unipievok.internal.discovery;
 
-import static org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants.THING_TYPE_TEMPERATURE_SENSOR;
+import static org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +9,10 @@ import java.util.Map;
 import org.eclipse.smarthome.binding.unipievok.UniPiBindingConstants;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Ds2438MultiSensor;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
+import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
@@ -45,15 +48,18 @@ public class UniPiDiscoveryService extends AbstractDiscoveryService {
     private void discover(Class<? extends Device> clazz, List<Device> devices) {
         if (Sensor.class.isAssignableFrom(clazz)) {
             discoverSensors(devices);
+        } else if (Digitalnput.class.isAssignableFrom(clazz)) {
+            discoverDigitalInputs(devices);
         } else {
             logger.warn("Unsupported device discovered: {}", clazz.getName());
         }
     }
 
     private void discoverSensors(List<Device> sensors) {
+        logger.debug("{} sensors discovered:", sensors.size());
 
         sensors.stream().forEach(s -> {
-            if (s instanceof Sensor) {
+            if (s instanceof TemperatureSensor) {
                 // @formatter:off
                 DiscoveryResult dr = DiscoveryResultBuilder
                         .create(new ThingUID(THING_TYPE_TEMPERATURE_SENSOR, getBridgeUID(), s.getId()))
@@ -61,11 +67,50 @@ public class UniPiDiscoveryService extends AbstractDiscoveryService {
                         .withBridge(getBridgeUID())
                         .withProperty("type", s.getProperty("typ"))
                         .withRepresentationProperty(s.getId())
-                        .withLabel("Temperature sensor Ds18b20")
+                        .withLabel("Temperature sensor " + s.getProperty("typ"))
                         .build();
                 // @formatter:on
+
+                logger.debug("Temperature sensor of type {} with id {} discovered", s.getProperty("typ"), s.getId());
+
+                thingDiscovered(dr);
+
+            } else if (s instanceof Ds2438MultiSensor) {
+                // @formatter:off
+                DiscoveryResult dr = DiscoveryResultBuilder
+                        .create(new ThingUID(THING_TYPE_DS2438_MULTI_SENSOR, getBridgeUID(), s.getId()))
+                        .withThingType(THING_TYPE_DS2438_MULTI_SENSOR)
+                        .withBridge(getBridgeUID())
+                        .withProperty("type", s.getProperty("typ"))
+                        .withRepresentationProperty(s.getId())
+                        .withLabel("Multi sensor " + s.getProperty("typ"))
+                        .build();
+                // @formatter:on
+
+                logger.debug("Multi-sensor of type {} with id {} discovered", s.getProperty("typ"), s.getId());
+
                 thingDiscovered(dr);
             }
+        });
+    }
+
+    private void discoverDigitalInputs(List<Device> inputs) {
+        logger.debug("{} digital inputs discovered:", inputs.size());
+
+        inputs.stream().forEach(di -> {
+            // @formatter:off
+            DiscoveryResult dr = DiscoveryResultBuilder
+                    .create(new ThingUID(THING_TYPE_DIGITAL_INPUT, getBridgeUID(), di.getId()))
+                    .withThingType(THING_TYPE_DIGITAL_INPUT)
+                    .withBridge(getBridgeUID())
+                    .withRepresentationProperty(di.getId())
+                    .withLabel("Digital input " + di.getId())
+                    .build();
+            // @formatter:on
+
+            logger.debug("Digital input with id {} discovered", di.getId());
+
+            thingDiscovered(dr);
         });
     }
 

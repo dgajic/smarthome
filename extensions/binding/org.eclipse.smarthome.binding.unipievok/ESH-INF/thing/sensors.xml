@@ -7,7 +7,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge" />
 		</supported-bridge-type-refs>
-
+		
 		<label>Temperature sensor</label>
 
 		<channels>
@@ -23,5 +23,28 @@
         </config-description>
 
 	</thing-type>
+	
+	<thing-type id="ds2438MultiSensor">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+
+        <label>Multi-sensor (temperature, humidity, illuminance) </label>
+
+        <channels>
+            <channel typeId="temperature" id="temperature" />
+            <channel typeId="humidity" id="humidity" />
+            <channel typeId="illuminance" id="illuminance" />
+        </channels>
+
+        <config-description>
+            <parameter name="refresh" type="integer" min="10">
+                <label>Refresh interval</label>
+                <description>Specifies the refresh interval in seconds.</description>
+                <default>30</default>
+            </parameter>
+        </config-description>
+
+    </thing-type>
 
 </thing:thing-descriptions>

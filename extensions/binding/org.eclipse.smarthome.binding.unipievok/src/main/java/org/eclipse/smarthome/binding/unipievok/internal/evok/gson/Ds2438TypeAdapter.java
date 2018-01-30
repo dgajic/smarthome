@@ -17,7 +17,7 @@ public class Ds2438TypeAdapter extends SensorTypeAdapter<Ds2438MultiSensor> {
     protected void registerAdditionalHandlers() {
         super.registerAdditionalHandlers();
 
-        registerHandler(TEMPERATURE, (dev, reader) -> {
+        registerHandler("temp", (dev, reader) -> {
             dev.getValue().set(TEMPERATURE, Optional.ofNullable(reader.nextDouble()).orElse(null));
         });
 

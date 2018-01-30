@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,7 +31,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.EvokUniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
-import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
+import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -52,7 +54,9 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
 
     private final Logger logger = LoggerFactory.getLogger(UniPiBridgeHandler.class);
 
-    private final Map<String, UpdateListener<TemperatureSensor>> tempUpdateListeners = new ConcurrentHashMap<>();
+    private final Map<String, UpdateListener<Sensor<?>>> sensorUpdateListeners = new ConcurrentHashMap<>();
+
+    private final Map<String, UpdateListener<Digitalnput>> digitalInputsUpdateListeners = new ConcurrentHashMap<>();
 
     @Nullable
     private UniPiService uniPiService;
@@ -83,19 +87,55 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
         }
     }
 
+    @SuppressWarnings("null")
     private void schedulePoolingJob() {
         scheduler.scheduleAtFixedRate(() -> {
-            // onUpdate
-            final Map<Class<? extends Device>, List<Device>> update = getDeviceTypes();
 
-            // notify listeners
+            logger.debug("About to pull the state from ALL devices");
 
-            Optional.ofNullable(update.get(TemperatureSensor.class)).ifPresent(devs -> {
-                devs.stream().forEach(dev -> Optional.ofNullable(tempUpdateListeners.get(dev.getId()))
-                        .ifPresent(ul -> ul.onUpdate((TemperatureSensor) dev)));
-            });
-            updateStatus(ThingStatus.ONLINE);
+            try {
+                // onUpdate
+                final Map<Class<? extends Device>, List<Device>> update = getDeviceTypes();
+
+                if (update == null || update.size() == 0) {
+                    updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.NONE, "Empty or no state returned");
+                } else {
+
+                    logger.debug("State pulled for {} devices", update.size());
+
+                    // notify sensor listeners
+                    update.entrySet().stream().forEach(e -> {
+                        if (Sensor.class.isAssignableFrom(e.getKey())) {
+                            notifyListeners(id -> sensorUpdateListeners.get(id), e.getValue());
+                        } else if (Digitalnput.class.isAssignableFrom(e.getKey())) {
+                            notifyListeners(id -> digitalInputsUpdateListeners.get(id), e.getValue());
+                        }
+                    });
+                    updateStatus(ThingStatus.ONLINE);
+                }
+            } catch (Throwable t) {
+                logger.error("Error cacthed: {}", t.getMessage());
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Bridge error: " + t.getMessage());
+            }
         }, 0, 10, TimeUnit.SECONDS);
+    }
+
+    @SuppressWarnings({ "unused", "null", "unchecked" })
+    private <T extends Device> void notifyListeners(Function<String, UpdateListener<T>> resolveListener,
+            List<Device> devices) {
+        devices.forEach(dev -> {
+
+            logger.debug("Searching listener for device {} with id {}", dev.getClass().getSimpleName(), dev.getId());
+
+            UpdateListener<T> listener = resolveListener.apply(dev.getId());
+
+            if (listener != null) {
+                logger.debug("Notifying listener for device with id {}", dev.getId());
+                listener.onUpdate((T) dev);
+            } else {
+                logger.debug("No listener found for device with id {}", dev.getId());
+            }
+        });
     }
 
     private @Nullable String getAPIUrl() {
@@ -133,7 +173,12 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
         return Optional.ofNullable(getDeviceTypes().get(clazz)).orElse(new ArrayList<>());
     }
 
-    public void registerUpdateListener(String id, UpdateListener<TemperatureSensor> updateListener) {
-        tempUpdateListeners.put(id, updateListener);
+    public void registerSensorsUpdateListener(String id, UpdateListener<Sensor<?>> updateListener) {
+        sensorUpdateListeners.put(id, updateListener);
     }
+
+    public void registerDigitalInputsUpdateListener(String id, UpdateListener<Digitalnput> updateListener) {
+        digitalInputsUpdateListeners.put(id, updateListener);
+    }
+
 }

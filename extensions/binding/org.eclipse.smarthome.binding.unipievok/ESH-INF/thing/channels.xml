@@ -17,7 +17,24 @@
         <label>Humidity</label>
         <description>Current humidity in percentage</description>
         <category>Humidity</category>
-        <state readOnly="true" pattern="%.2f %" />
+        <state readOnly="true" pattern="%.1f" />
     </channel-type>
+    
+    <channel-type id="illuminance">
+        <item-type>Number</item-type>
+        <label>Illuminance</label>
+        <description>Current illuminance</description>
+        <category>Illuminance</category>
+        <state readOnly="true" pattern="%.1f" />
+    </channel-type>
+    
+    <channel-type id="dinput">
+        <item-type>Contact</item-type>
+        <label>Digital Input</label>
+        <description>State</description>
+        <category>Light</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
     
 </thing:thing-descriptions>

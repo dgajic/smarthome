@@ -7,5 +7,5 @@ public interface UpdateListener<T extends Device> {
 
     boolean isSupported(@NonNull Class<? extends Device> clazz);
 
-    void onUpdate(@NonNull T devices);
+    void onUpdate(@NonNull T device);
 }

@@ -32,8 +32,14 @@ public class UniPiBindingConstants {
 
     // generic thing types
     public static final ThingTypeUID THING_TYPE_TEMPERATURE_SENSOR = new ThingTypeUID(BINDING_ID, "temperatureSensor");
+    public static final ThingTypeUID THING_TYPE_DS2438_MULTI_SENSOR = new ThingTypeUID(BINDING_ID, "ds2438MultiSensor");
+    public static final ThingTypeUID THING_TYPE_DIGITAL_INPUT = new ThingTypeUID(BINDING_ID, "digitalInput");
 
+    // generic channel types
     public static final ChannelTypeUID TEMP_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "temperature");
+    public static final ChannelTypeUID HUMIDIY_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "humidity");
+    public static final ChannelTypeUID ILLUMINANCE_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "illuminance");
+    public static final ChannelTypeUID DINPUT_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "dinput");
 
     // bridge config properties
     public static final String API_URL = "evokApiUrl";
@@ -41,7 +47,7 @@ public class UniPiBindingConstants {
     public static final String POLLING_INTERVAL = "pollingInterval";
 
     // sensor field name constants
-    public static final String TEMPERATURE = "temp";
+    public static final String TEMPERATURE = "temperature";
     public static final String HUMIDITY = "humidity";
     public static final String ILLUMINANCE = "illuminance";
 

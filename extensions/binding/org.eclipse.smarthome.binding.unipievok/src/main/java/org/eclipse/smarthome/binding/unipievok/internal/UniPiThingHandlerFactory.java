@@ -23,6 +23,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiDigitalInputsHandler;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiSensorsHandler;
 import org.eclipse.smarthome.binding.unipievok.internal.discovery.UniPiDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
@@ -46,7 +47,8 @@ import org.osgi.service.component.annotations.Component;
 public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
 
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .unmodifiableSet(new HashSet<>(Arrays.asList(THING_TYPE_BRIDGE, THING_TYPE_TEMPERATURE_SENSOR)));
+            .unmodifiableSet(new HashSet<>(Arrays.asList(THING_TYPE_BRIDGE, THING_TYPE_TEMPERATURE_SENSOR,
+                    THING_TYPE_DS2438_MULTI_SENSOR, THING_TYPE_DIGITAL_INPUT)));
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -58,13 +60,20 @@ public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (THING_TYPE_BRIDGE.equals(thingTypeUID)) {
+
             UniPiBridgeHandler bridgeHandler = new UniPiBridgeHandler((Bridge) thing);
             bundleContext.registerService(DiscoveryService.class.getName(),
                     new UniPiDiscoveryService(bridgeHandler, 10), new Hashtable<String, Object>());
             return bridgeHandler;
-        } else if (THING_TYPE_TEMPERATURE_SENSOR.equals(thingTypeUID)) {
-            UniPiSensorsHandler sensorsHandler = new UniPiSensorsHandler(thing);
-            return sensorsHandler;
+
+        } else if (THING_TYPE_TEMPERATURE_SENSOR.equals(thingTypeUID)
+                || THING_TYPE_DS2438_MULTI_SENSOR.equals(thingTypeUID)) {
+
+            return new UniPiSensorsHandler(thing);
+
+        } else if (THING_TYPE_DIGITAL_INPUT.equals(thingTypeUID)) {
+
+            return new UniPiDigitalInputsHandler(thing);
         }
         return null;
     }

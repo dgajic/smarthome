@@ -20,25 +20,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.binding.unipievok.DeviceToThingTypeMapper;
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.EvokUniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
-import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
-import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
+import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.ConfigStatusBridgeHandler;
+import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,10 +54,6 @@ import org.slf4j.LoggerFactory;
 public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
 
     private final Logger logger = LoggerFactory.getLogger(UniPiBridgeHandler.class);
-
-    private final Map<String, UpdateListener<Sensor<?>>> sensorUpdateListeners = new ConcurrentHashMap<>();
-
-    private final Map<String, UpdateListener<Digitalnput>> digitalInputsUpdateListeners = new ConcurrentHashMap<>();
 
     @Nullable
     private UniPiService uniPiService;
@@ -94,57 +91,61 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
             logger.debug("About to pull the state from ALL devices");
 
             try {
-                // onUpdate
-                final Map<Class<? extends Device>, List<Device>> update = getDeviceTypes();
 
-                if (update == null || update.size() == 0) {
+                Device[] update = uniPiService.getState();
+
+                if (update == null || update.length == 0) {
                     updateStatus(ThingStatus.UNKNOWN, ThingStatusDetail.NONE, "Empty or no state returned");
                 } else {
 
-                    logger.debug("State pulled for {} devices", update.size());
+                    logger.debug("State pulled for {} devices", update.length);
 
-                    // notify sensor listeners
-                    update.entrySet().stream().forEach(e -> {
-                        if (Sensor.class.isAssignableFrom(e.getKey())) {
-                            notifyListeners(id -> sensorUpdateListeners.get(id), e.getValue());
-                        } else if (Digitalnput.class.isAssignableFrom(e.getKey())) {
-                            notifyListeners(id -> digitalInputsUpdateListeners.get(id), e.getValue());
-                        }
+                    Stream.of(update).forEach(device -> {
+                        getUpdateListener(device).ifPresent(listener -> notifyListener(listener, device));
                     });
+
                     updateStatus(ThingStatus.ONLINE);
                 }
             } catch (Throwable t) {
                 logger.error("Error cacthed: {}", t.getMessage());
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Bridge error: " + t.getMessage());
             }
-        }, 0, 10, TimeUnit.SECONDS);
+        }, 0, 30, TimeUnit.SECONDS);
+    }
+
+    public void startWebSocketClient() {
+        // TODO
+    }
+
+    private Optional<UpdateListener<?>> getUpdateListener(Device device) {
+        ThingTypeUID thingType = DeviceToThingTypeMapper.mapToThingTypeUID(device);
+        if (thingType != null) {
+            Thing thing = getThingByUID(new ThingUID(thingType, getThing().getUID(), device.getId()));
+            if (thing != null) {
+                ThingHandler handler = thing.getHandler();
+                if (handler != null && handler instanceof UpdateListener<?>) {
+                    return Optional.of((UpdateListener<?>) handler);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     @SuppressWarnings({ "unused", "null", "unchecked" })
-    private <T extends Device> void notifyListeners(Function<String, UpdateListener<T>> resolveListener,
-            List<Device> devices) {
-        devices.forEach(dev -> {
+    private <T extends Device> void notifyListener(UpdateListener<T> listener, Device dev) {
 
-            logger.debug("Searching listener for device {} with id {}", dev.getClass().getSimpleName(), dev.getId());
+        logger.debug("Searching listener for device {} with id {}", dev.getClass().getSimpleName(), dev.getId());
 
-            UpdateListener<T> listener = resolveListener.apply(dev.getId());
-
-            if (listener != null) {
-                logger.debug("Notifying listener for device with id {}", dev.getId());
-                listener.onUpdate((T) dev);
-            } else {
-                logger.debug("No listener found for device with id {}", dev.getId());
-            }
-        });
+        if (listener != null) {
+            logger.debug("Notifying listener for device with id {}", dev.getId());
+            listener.onUpdate((T) dev);
+        } else {
+            logger.debug("No listener found for device with id {}", dev.getId());
+        }
     }
 
     private @Nullable String getAPIUrl() {
         return (String) getThing().getConfiguration().get(API_URL);
-    }
-
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -173,12 +174,13 @@ public class UniPiBridgeHandler extends ConfigStatusBridgeHandler {
         return Optional.ofNullable(getDeviceTypes().get(clazz)).orElse(new ArrayList<>());
     }
 
-    public void registerSensorsUpdateListener(String id, UpdateListener<Sensor<?>> updateListener) {
-        sensorUpdateListeners.put(id, updateListener);
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
+        // TODO Auto-generated method stub
     }
 
-    public void registerDigitalInputsUpdateListener(String id, UpdateListener<Digitalnput> updateListener) {
-        digitalInputsUpdateListeners.put(id, updateListener);
+    @Nullable
+    public UniPiService getUniPiService() {
+        return this.uniPiService;
     }
-
 }

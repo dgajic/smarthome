@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.util.Fields;
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiService;
 import org.eclipse.smarthome.binding.unipievok.internal.UniPiServiceException;
 import org.eclipse.smarthome.binding.unipievok.internal.evok.gson.CompleteStateDeserializer;
@@ -66,6 +67,26 @@ public class EvokUniPiService implements UniPiService {
             }.getType();
 
             return gson.fromJson(response.getContentAsString(), type);
+
+        } catch (Exception e) {
+            throw new UniPiServiceException("evokservice.getstate.error", e);
+        }
+    }
+
+    @Override
+    public void setRelayState(String circuit, boolean state) {
+        if (!httpClient.isStarted()) {
+            throw new UniPiServiceException("HTTP client is not started");
+        }
+
+        try {
+            Fields fields = new Fields();
+            fields.put("value", state ? "1" : "0");
+            ContentResponse response = httpClient.FORM(url + "/rest/relay/" + circuit, fields);
+
+            if (response.getStatus() != HttpStatus.OK_200) {
+                throw new UniPiServiceException("evokservice.getstate.status.error");
+            }
 
         } catch (Exception e) {
             throw new UniPiServiceException("evokservice.getstate.error", e);

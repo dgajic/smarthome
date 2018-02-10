@@ -50,4 +50,9 @@ public abstract class Device {
         this.globDevId = globDevId;
     }
 
+    public String getUID() {
+        Object dev = getProperty("dev");
+        return dev != null ? dev + "::" + this.id : this.id;
+    }
+
 }

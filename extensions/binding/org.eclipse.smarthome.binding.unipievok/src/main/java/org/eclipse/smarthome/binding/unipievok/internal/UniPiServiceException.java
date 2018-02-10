@@ -14,4 +14,5 @@ public class UniPiServiceException extends RuntimeException {
     public UniPiServiceException(String message) {
         super(message);
     }
+
 }

@@ -9,4 +9,6 @@ public interface UniPiService {
     Device[] getState();
 
     void dispose() throws Exception;
+
+    void setRelayState(String circuit, boolean state);
 }

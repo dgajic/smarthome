@@ -20,6 +20,7 @@ Import-Package:
  org.eclipse.jetty.http;version="[9.3.15,9.3.15]",
  org.eclipse.jetty.util;version="[9.3.15,9.3.15]",
  org.eclipse.jetty.util.component;version="[9.3.15,9.3.15]",
+ org.eclipse.jetty.websocket.client;version="9.3.15",
  org.eclipse.smarthome.binding.unipievok,
  org.eclipse.smarthome.binding.unipievok.handler,
  org.eclipse.smarthome.config.core.status,

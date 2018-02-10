@@ -11,6 +11,7 @@ import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Ds2438MultiSensor;
+import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
 import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
@@ -50,6 +51,8 @@ public class UniPiDiscoveryService extends AbstractDiscoveryService {
             discoverSensors(devices);
         } else if (Digitalnput.class.isAssignableFrom(clazz)) {
             discoverDigitalInputs(devices);
+        } else if (RelayOutput.class.isAssignableFrom(clazz)) {
+            discoverRelayOutput(devices);
         } else {
             logger.warn("Unsupported device discovered: {}", clazz.getName());
         }
@@ -109,6 +112,26 @@ public class UniPiDiscoveryService extends AbstractDiscoveryService {
             // @formatter:on
 
             logger.debug("Digital input with id {} discovered", di.getId());
+
+            thingDiscovered(dr);
+        });
+    }
+
+    private void discoverRelayOutput(List<Device> relays) {
+        logger.debug("{} relay outputs discovered:", relays.size());
+
+        relays.stream().forEach(r -> {
+            // @formatter:off
+            DiscoveryResult dr = DiscoveryResultBuilder
+                    .create(new ThingUID(THING_TYPE_RELAY_OUTPUT, getBridgeUID(), r.getId()))
+                    .withThingType(THING_TYPE_RELAY_OUTPUT)
+                    .withBridge(getBridgeUID())
+                    .withRepresentationProperty(r.getId())
+                    .withLabel("Relay output " + r.getId())
+                    .build();
+            // @formatter:on
+
+            logger.debug("Relay output with id {} discovered", r.getId());
 
             thingDiscovered(dr);
         });

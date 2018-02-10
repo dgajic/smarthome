@@ -34,12 +34,14 @@ public class UniPiBindingConstants {
     public static final ThingTypeUID THING_TYPE_TEMPERATURE_SENSOR = new ThingTypeUID(BINDING_ID, "temperatureSensor");
     public static final ThingTypeUID THING_TYPE_DS2438_MULTI_SENSOR = new ThingTypeUID(BINDING_ID, "ds2438MultiSensor");
     public static final ThingTypeUID THING_TYPE_DIGITAL_INPUT = new ThingTypeUID(BINDING_ID, "digitalInput");
+    public static final ThingTypeUID THING_TYPE_RELAY_OUTPUT = new ThingTypeUID(BINDING_ID, "relayOutput");
 
     // generic channel types
     public static final ChannelTypeUID TEMP_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "temperature");
     public static final ChannelTypeUID HUMIDIY_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "humidity");
     public static final ChannelTypeUID ILLUMINANCE_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "illuminance");
     public static final ChannelTypeUID DINPUT_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "dinput");
+    public static final ChannelTypeUID RELAY_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "relay");
 
     // bridge config properties
     public static final String API_URL = "evokApiUrl";

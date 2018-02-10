@@ -24,7 +24,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiBridgeHandler;
 import org.eclipse.smarthome.binding.unipievok.handler.UniPiDigitalInputsHandler;
-import org.eclipse.smarthome.binding.unipievok.handler.UniPiSensorsHandler;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiDs2438MultiSensorsHandler;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiRelayOutputsHandler;
+import org.eclipse.smarthome.binding.unipievok.handler.UniPiTemperatureSensorsHandler;
 import org.eclipse.smarthome.binding.unipievok.internal.discovery.UniPiDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -46,9 +48,15 @@ import org.osgi.service.component.annotations.Component;
 @NonNullByDefault
 public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
 
+    // @formatter:off
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .unmodifiableSet(new HashSet<>(Arrays.asList(THING_TYPE_BRIDGE, THING_TYPE_TEMPERATURE_SENSOR,
-                    THING_TYPE_DS2438_MULTI_SENSOR, THING_TYPE_DIGITAL_INPUT)));
+            .unmodifiableSet(new HashSet<>(Arrays.asList(
+                    THING_TYPE_BRIDGE,
+                    THING_TYPE_TEMPERATURE_SENSOR,
+                    THING_TYPE_DS2438_MULTI_SENSOR,
+                    THING_TYPE_DIGITAL_INPUT,
+                    THING_TYPE_RELAY_OUTPUT)));
+    // @formatter:on
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -60,20 +68,18 @@ public class UniPiThingHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (THING_TYPE_BRIDGE.equals(thingTypeUID)) {
-
             UniPiBridgeHandler bridgeHandler = new UniPiBridgeHandler((Bridge) thing);
             bundleContext.registerService(DiscoveryService.class.getName(),
                     new UniPiDiscoveryService(bridgeHandler, 10), new Hashtable<String, Object>());
             return bridgeHandler;
-
-        } else if (THING_TYPE_TEMPERATURE_SENSOR.equals(thingTypeUID)
-                || THING_TYPE_DS2438_MULTI_SENSOR.equals(thingTypeUID)) {
-
-            return new UniPiSensorsHandler(thing);
-
+        } else if (THING_TYPE_TEMPERATURE_SENSOR.equals(thingTypeUID)) {
+            return new UniPiTemperatureSensorsHandler(thing);
+        } else if (THING_TYPE_DS2438_MULTI_SENSOR.equals(thingTypeUID)) {
+            return new UniPiDs2438MultiSensorsHandler(thing);
         } else if (THING_TYPE_DIGITAL_INPUT.equals(thingTypeUID)) {
-
             return new UniPiDigitalInputsHandler(thing);
+        } else if (THING_TYPE_RELAY_OUTPUT.equals(thingTypeUID)) {
+            return new UniPiRelayOutputsHandler(thing);
         }
         return null;
     }

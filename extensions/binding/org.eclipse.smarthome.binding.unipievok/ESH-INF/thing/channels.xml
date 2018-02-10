@@ -17,7 +17,7 @@
         <label>Humidity</label>
         <description>Current humidity in percentage</description>
         <category>Humidity</category>
-        <state readOnly="true" pattern="%.1f" />
+        <state readOnly="true" pattern="%.2f %%" />
     </channel-type>
     
     <channel-type id="illuminance">
@@ -32,8 +32,14 @@
         <item-type>Contact</item-type>
         <label>Digital Input</label>
         <description>State</description>
-        <category>Light</category>
         <state readOnly="true"/>
+    </channel-type>
+    
+     <channel-type id="relay">
+        <item-type>Switch</item-type>
+        <label>Relay</label>
+        <description>The switch channel allows to switch the light on and off.
+        </description>
     </channel-type>
     
     

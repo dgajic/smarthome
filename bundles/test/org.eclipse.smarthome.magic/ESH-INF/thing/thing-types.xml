@@ -56,6 +56,15 @@
 		</channels>
 	</thing-type>
 
+	<thing-type id="location-thing">
+		<label>Magic Location</label>
+		<description>A location thing providing a location channel.</description>
+
+		<channels>
+			<channel id="location" typeId="location" />
+		</channels>
+	</thing-type>
+
 	<thing-type id="configurable-thing">
 		<label>Magic Configurable Thing</label>
 		<description>A thing that can be configured.</description>
@@ -73,4 +82,12 @@
 		</config-description>
 	</thing-type>
 
+	<thing-type id="delayed-thing">
+        <label>Magic Delayed Online Thing</label>
+        <description>A thing that goes online after some time.</description>
+
+        <channels>
+            <channel id="number" typeId="number" />
+        </channels>
+    </thing-type>
 </thing:thing-descriptions>

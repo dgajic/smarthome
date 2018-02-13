@@ -16,17 +16,22 @@
 		<representation-property>serialNumber</representation-property>
 
 		<config-description>
-			<parameter name="evokApiUrl" type="text">
-				<context>url</context>
-				<label>Evok API URL</label>
-				<description>URL of the Evok API</description>
+			<parameter name="evokApiIpAddress" type="text">
+				<label>Evok API IP Address</label>
+				<description>Evok API IP Address</description>
 				<required>true</required>
 			</parameter>
+			<parameter name="evokApiPort" type="integer">
+                <label>Evok API Port</label>
+                <description>Evok API Port</description>
+                <required>true</required>
+                <default>80</default>
+            </parameter>
 			<parameter name="pollingInterval" type="integer" min="1" step="1" unit="s">
 				<label>Polling Interval</label>
 				<description>Seconds between fetching values from the Bridge.</description>
 				<required>true</required>
-				<default>10</default>
+				<default>30</default>
 			</parameter>
 		</config-description>
 	</bridge-type>

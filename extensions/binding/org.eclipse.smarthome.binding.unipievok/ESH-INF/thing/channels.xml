@@ -29,7 +29,7 @@
     </channel-type>
     
     <channel-type id="dinput">
-        <item-type>Contact</item-type>
+        <item-type>Switch</item-type>
         <label>Digital Input</label>
         <description>State</description>
         <state readOnly="true"/>

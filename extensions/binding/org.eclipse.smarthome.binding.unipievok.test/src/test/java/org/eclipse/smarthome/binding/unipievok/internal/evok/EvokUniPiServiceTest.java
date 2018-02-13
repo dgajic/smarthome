@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2014,2018 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
 package org.eclipse.smarthome.binding.unipievok.internal.evok;
 
 import static org.junit.Assert.assertNotNull;
@@ -23,7 +35,7 @@ public class EvokUniPiServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        evokService = new EvokUniPiService("http://192.168.1.104");
+        evokService = new EvokUniPiService("192.168.1.104", 80);
         evokService.initialize();
 
         client = new WebSocketClient();
@@ -44,6 +56,7 @@ public class EvokUniPiServiceTest {
 
             URI echoUri = new URI("ws://192.168.1.104/ws");
             ClientUpgradeRequest request = new ClientUpgradeRequest();
+
             Session session = client.connect(socket, echoUri, request).get();
 
             session.getRemote().sendString("{\"cmd\":\"filter\", \"devices\":[\"input\"]}");

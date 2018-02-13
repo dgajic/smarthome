@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014,2017 Contributors to the Eclipse Foundation
+ * Copyright (c) 2014,2018 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -44,7 +44,9 @@ public class UniPiBindingConstants {
     public static final ChannelTypeUID RELAY_CHANNEL_TYPE_ID = new ChannelTypeUID(BINDING_ID, "relay");
 
     // bridge config properties
-    public static final String API_URL = "evokApiUrl";
+    public static final String API_IP_ADDRESS = "evokApiIpAddress";
+    public static final String API_PORT = "evokApiPort";
+
     public static final String SERIAL_NUMBER = "serialNumber";
     public static final String POLLING_INTERVAL = "pollingInterval";
 

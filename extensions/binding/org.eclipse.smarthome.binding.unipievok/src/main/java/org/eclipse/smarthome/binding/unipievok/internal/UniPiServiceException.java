@@ -12,6 +12,11 @@
  */
 package org.eclipse.smarthome.binding.unipievok.internal;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class UniPiServiceException extends RuntimeException {
 
     /**

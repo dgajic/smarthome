@@ -14,6 +14,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.Neuron;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class NeuronTypeAdapter extends DeviceTypeAdapter<Neuron> {
 
     @Override

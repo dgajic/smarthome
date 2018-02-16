@@ -21,6 +21,11 @@ import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
 import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
+/**
+ * Map between device type and ThingTypeUID.
+ *
+ * @author Dragan Gajic
+ */
 public interface DeviceToThingTypeMapper {
 
     static ThingTypeUID mapToThingTypeUID(Device device) {

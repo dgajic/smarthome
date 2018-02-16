@@ -16,6 +16,11 @@ import java.util.Optional;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.TemperatureSensor;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class Ds18b20TypeAdapter extends SensorTypeAdapter<TemperatureSensor> {
 
     @Override

@@ -14,6 +14,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.model;
 
 import java.util.Map;
 
+/**
+ *
+ * @author dgajic
+ *
+ */
 public class Neuron extends Device {
     private Integer serialNumber;
     private String model;

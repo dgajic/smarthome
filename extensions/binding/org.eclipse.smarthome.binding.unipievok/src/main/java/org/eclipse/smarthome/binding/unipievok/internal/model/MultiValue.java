@@ -15,6 +15,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author dgajic
+ *
+ */
 public class MultiValue {
     private final Map<String, Class<?>> definition;
     private final Map<String, Object> values = new HashMap<>();

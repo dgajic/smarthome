@@ -16,6 +16,11 @@ import java.util.function.Consumer;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public interface UniPiService {
 
     void initialize() throws Exception;

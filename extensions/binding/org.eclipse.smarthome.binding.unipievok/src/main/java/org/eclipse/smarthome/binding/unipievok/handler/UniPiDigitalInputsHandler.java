@@ -18,6 +18,11 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 @NonNullByDefault
 public class UniPiDigitalInputsHandler extends UniPiAbstractHandler<Digitalnput> {
 

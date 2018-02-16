@@ -20,6 +20,11 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 @NonNullByDefault
 public class UniPiDs2438MultiSensorsHandler extends UniPiAbstractHandler<Ds2438MultiSensor> {
 

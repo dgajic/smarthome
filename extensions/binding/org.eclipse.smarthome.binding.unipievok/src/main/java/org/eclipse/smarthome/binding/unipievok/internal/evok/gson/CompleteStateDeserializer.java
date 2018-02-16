@@ -29,6 +29,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class CompleteStateDeserializer implements JsonDeserializer<Device[]> {
 
     @Override

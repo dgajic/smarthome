@@ -14,6 +14,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.DigitalOutput;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class DigitalOutputTypeAdapter extends DeviceTypeAdapter<DigitalOutput> {
 
     @Override

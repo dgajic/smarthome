@@ -19,6 +19,11 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 @NonNullByDefault
 public class UniPiRelayOutputsHandler extends UniPiAbstractHandler<RelayOutput> {
 

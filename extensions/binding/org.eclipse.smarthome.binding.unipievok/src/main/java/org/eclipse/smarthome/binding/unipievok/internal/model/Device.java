@@ -15,6 +15,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public abstract class Device {
     private String id;
     private int globDevId;

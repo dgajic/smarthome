@@ -14,6 +14,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.RelayOutput;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class RelayOutputTypeAdapter extends DeviceTypeAdapter<RelayOutput> {
 
     @Override

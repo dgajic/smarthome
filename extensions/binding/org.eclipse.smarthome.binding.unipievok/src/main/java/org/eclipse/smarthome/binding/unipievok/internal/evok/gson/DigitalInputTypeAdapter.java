@@ -14,6 +14,11 @@ package org.eclipse.smarthome.binding.unipievok.internal.evok.gson;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.Digitalnput;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class DigitalInputTypeAdapter extends DeviceTypeAdapter<Digitalnput> {
 
     @Override

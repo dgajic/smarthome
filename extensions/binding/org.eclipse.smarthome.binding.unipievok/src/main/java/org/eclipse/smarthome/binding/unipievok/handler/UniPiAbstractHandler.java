@@ -26,6 +26,13 @@ import org.eclipse.smarthome.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * TBD
+ *
+ * @author Dragan Gajic
+ *
+ * @param <T>
+ */
 public abstract class UniPiAbstractHandler<T extends Device> extends BaseThingHandler implements UpdateListener<T> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());

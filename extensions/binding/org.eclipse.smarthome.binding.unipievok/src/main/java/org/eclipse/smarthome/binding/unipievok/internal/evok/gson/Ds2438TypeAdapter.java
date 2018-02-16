@@ -18,6 +18,11 @@ import java.util.Optional;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.Ds2438MultiSensor;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class Ds2438TypeAdapter extends SensorTypeAdapter<Ds2438MultiSensor> {
 
     @Override

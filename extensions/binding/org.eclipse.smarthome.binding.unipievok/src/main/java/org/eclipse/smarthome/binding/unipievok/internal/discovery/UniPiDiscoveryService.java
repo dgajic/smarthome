@@ -34,6 +34,11 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class UniPiDiscoveryService extends AbstractDiscoveryService {
 
     private final Logger logger = LoggerFactory.getLogger(UniPiDiscoveryService.class);
@@ -54,7 +59,7 @@ public class UniPiDiscoveryService extends AbstractDiscoveryService {
                 discover(e.getKey(), e.getValue());
             });
         } else {
-            logger.debug("Skipping scan because bridge status is not ONLINE but " + bridge.getThing().getStatus());
+            logger.debug("Skipping scan because bridge status is not ONLINE but {}", bridge.getThing().getStatus());
         }
     }
 

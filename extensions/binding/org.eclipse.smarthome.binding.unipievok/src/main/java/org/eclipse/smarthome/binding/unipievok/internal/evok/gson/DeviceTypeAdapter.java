@@ -22,6 +22,12 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ * @param <T>
+ */
 public abstract class DeviceTypeAdapter<T extends Device> extends TypeAdapter<T> {
 
     private final Map<String, DeviceFieldHandler<T>> handlers = new HashMap<>();

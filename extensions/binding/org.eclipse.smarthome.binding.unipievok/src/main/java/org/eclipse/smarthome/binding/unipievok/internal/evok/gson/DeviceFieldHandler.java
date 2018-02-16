@@ -18,6 +18,12 @@ import org.eclipse.smarthome.binding.unipievok.internal.model.Device;
 
 import com.google.gson.stream.JsonReader;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ * @param <T>
+ */
 @FunctionalInterface
 public interface DeviceFieldHandler<T extends Device> extends BiConsumer<T, JsonReader> {
 

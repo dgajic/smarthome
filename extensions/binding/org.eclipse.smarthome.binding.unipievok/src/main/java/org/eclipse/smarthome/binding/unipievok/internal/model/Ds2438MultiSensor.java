@@ -18,6 +18,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class Ds2438MultiSensor extends MultiSensor {
 
     private static final Set<String> FIELDS = new HashSet<>(Arrays.asList(TEMPERATURE, HUMIDITY, ILLUMINANCE));

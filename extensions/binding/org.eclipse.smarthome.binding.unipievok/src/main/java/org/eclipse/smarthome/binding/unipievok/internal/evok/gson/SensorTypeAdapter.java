@@ -17,6 +17,12 @@ import java.time.ZoneOffset;
 
 import org.eclipse.smarthome.binding.unipievok.internal.model.Sensor;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ * @param <S>
+ */
 public abstract class SensorTypeAdapter<S extends Sensor<?>> extends DeviceTypeAdapter<S> {
 
     @Override

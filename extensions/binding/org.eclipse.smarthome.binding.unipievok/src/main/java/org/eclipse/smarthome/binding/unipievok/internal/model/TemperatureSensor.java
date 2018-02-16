@@ -12,6 +12,11 @@
  */
 package org.eclipse.smarthome.binding.unipievok.internal.model;
 
+/**
+ *
+ * @author dgajic
+ *
+ */
 public class TemperatureSensor extends Sensor<Double> {
 
 }

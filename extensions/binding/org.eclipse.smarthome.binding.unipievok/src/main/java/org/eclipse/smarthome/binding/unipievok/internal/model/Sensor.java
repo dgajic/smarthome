@@ -14,6 +14,12 @@ package org.eclipse.smarthome.binding.unipievok.internal.model;
 
 import java.time.LocalDateTime;
 
+/**
+ *
+ * @author dgajic
+ *
+ * @param <T>
+ */
 public class Sensor<T> extends Device {
     private T value;
     private LocalDateTime time;

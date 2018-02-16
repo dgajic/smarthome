@@ -51,6 +51,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ *
+ * @author Dragan Gajic
+ *
+ */
 public class EvokUniPiService implements UniPiService {
 
     private final Logger logger = LoggerFactory.getLogger(EvokUniPiService.class);

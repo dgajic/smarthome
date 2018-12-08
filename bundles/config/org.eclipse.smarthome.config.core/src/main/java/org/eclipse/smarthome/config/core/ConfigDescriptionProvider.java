@@ -21,8 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * The {@link ConfigDescriptionProvider} can be implemented and registered as an <i>OSGi</i>
- * service to provide {@link ConfigDescription}s. The {@link ConfigDescriptionRegistry} tracks
- * each {@link ConfigDescriptionProvider} and registers a {@link ConfigDescriptionsChangeListener} on each provider.
+ * service to provide {@link ConfigDescription}s.
  *
  * @author Dennis Nobel - Initial contribution
  * @author Michael Grammling - Initial contribution
@@ -37,7 +36,7 @@ public interface ConfigDescriptionProvider {
      * @return the configuration descriptions provided by this provider (not
      *         null, could be empty)
      */
-    Collection<ConfigDescription> getConfigDescriptions(Locale locale);
+    Collection<ConfigDescription> getConfigDescriptions(@Nullable Locale locale);
 
     /**
      * Provides a {@link ConfigDescription} for the given URI.
@@ -47,6 +46,6 @@ public interface ConfigDescriptionProvider {
      * @return config description or null if no config description could be found
      */
     @Nullable
-    ConfigDescription getConfigDescription(URI uri, Locale locale);
+    ConfigDescription getConfigDescription(URI uri, @Nullable Locale locale);
 
 }

@@ -12,7 +12,7 @@
  */
 package org.eclipse.smarthome.binding.dmx.handler;
 
-import static org.eclipse.smarthome.binding.dmx.DmxBindingConstants.*;
+import static org.eclipse.smarthome.binding.dmx.internal.DmxBindingConstants.*;
 
 import java.util.Collections;
 import java.util.Set;
@@ -80,9 +80,8 @@ public class ArtnetBridgeHandler extends DmxOverEthernetHandler {
         }
         logger.debug("refresh mode set to always: {}", refreshAlways);
 
+        updateStatus(ThingStatus.UNKNOWN);
         super.updateConfiguration();
-
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.NONE);
 
         logger.debug("updated configuration for ArtNet bridge {}", this.thing.getUID());
     }

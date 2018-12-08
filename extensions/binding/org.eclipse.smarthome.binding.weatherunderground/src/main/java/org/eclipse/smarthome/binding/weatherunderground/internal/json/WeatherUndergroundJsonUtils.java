@@ -12,11 +12,13 @@
  */
 package org.eclipse.smarthome.binding.weatherunderground.internal.json;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Calendar;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -33,63 +35,25 @@ public class WeatherUndergroundJsonUtils {
     private static final String TREND_STABLE = "stable";
 
     /**
-     * Returns the field value from the object data, nested fields are possible.
-     * If the fieldName is for example current#humidity, the methods getCurrent().getHumidity() are called.
-     */
-    public static Object getValue(String channelId, Object data) throws Exception {
-        String[] fields = StringUtils.split(channelId, "#");
-        return getValue(data, fields, 0);
-    }
-
-    /**
-     * Iterates through the fields and returns the getter value.
-     */
-    @SuppressWarnings("all")
-    private static Object getValue(Object data, String[] fields, int index) throws Exception {
-        if (data == null) {
-            return null;
-        }
-        String fieldName = fields[index];
-        Method method = data.getClass().getMethod(toGetterString(fieldName), null);
-        Object result = method.invoke(data, (Object[]) null);
-        if (index + 1 < fields.length) {
-            result = getValue(result, fields, index + 1);
-        }
-        return result;
-    }
-
-    /**
-     * Converts the string to a getter method.
-     */
-    private static String toGetterString(String str) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("get");
-        sb.append(Character.toTitleCase(str.charAt(0)));
-        sb.append(str.substring(1));
-        return sb.toString();
-    }
-
-    /**
      * Convert a string representing an Epoch value into a Calendar object
      *
      * @param value the Epoch value as a string
      *
-     * @return the Calendar object representing the date and time of the Epoch
+     * @return the ZonedDateTime object representing the date and time of the Epoch
      *         or null in case of conversion error
      */
-    public static Calendar convertToCalendar(String value) {
-        Calendar result = null;
+    public static ZonedDateTime convertToZonedDateTime(String value) {
         if (isValid(value)) {
             try {
-                result = Calendar.getInstance();
-                result.setTimeInMillis(Long.valueOf(value) * 1000);
-            } catch (NumberFormatException e) {
-                LoggerFactory.getLogger(WeatherUndergroundJsonUtils.class).debug("Cannot convert {} to Calendar",
+                Instant epochSeconds = Instant.ofEpochSecond(Long.valueOf(value));
+                return ZonedDateTime.ofInstant(epochSeconds, TimeZone.getDefault().toZoneId());
+            } catch (DateTimeException e) {
+                LoggerFactory.getLogger(WeatherUndergroundJsonUtils.class).debug("Cannot convert {} to ZonedDateTime",
                         value);
-                result = null;
             }
         }
-        return result;
+
+        return null;
     }
 
     /**

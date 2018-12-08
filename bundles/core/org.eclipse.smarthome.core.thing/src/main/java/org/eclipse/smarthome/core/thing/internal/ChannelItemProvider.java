@@ -43,7 +43,6 @@ import org.eclipse.smarthome.core.thing.type.ChannelType;
 import org.eclipse.smarthome.core.thing.type.ChannelTypeRegistry;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
@@ -59,7 +58,7 @@ import org.slf4j.LoggerFactory;
  * @author Markus Rathgeb - Add locale provider support
  * @author Thomas Höfer - Added modified operation
  */
-@Component(configurationPid = "org.eclipse.smarthome.channelitemprovider", immediate = true, configurationPolicy = ConfigurationPolicy.OPTIONAL)
+@Component(configurationPid = "org.eclipse.smarthome.channelitemprovider", immediate = true)
 public class ChannelItemProvider implements ItemProvider {
 
     private final Logger logger = LoggerFactory.getLogger(ChannelItemProvider.class);
@@ -277,15 +276,14 @@ public class ChannelItemProvider implements ItemProvider {
                     }
                 }
             }
-            if (item != null) {
-                if (item instanceof GenericItem) {
-                    GenericItem gItem = (GenericItem) item;
-                    gItem.setLabel(getLabel(channel));
-                    gItem.setCategory(getCategory(channel));
-                    gItem.addTags(channel.getDefaultTags());
-                }
+            if (item instanceof GenericItem) {
+                GenericItem gItem = (GenericItem) item;
+                gItem.setLabel(getLabel(channel));
+                gItem.setCategory(getCategory(channel));
+                gItem.addTags(channel.getDefaultTags());
             }
             if (item != null) {
+                logger.trace("Created virtual item '{}'", item.getName());
                 items.put(item.getName(), item);
                 for (ProviderChangeListener<Item> listener : listeners) {
                     listener.added(this, item);
@@ -330,6 +328,7 @@ public class ChannelItemProvider implements ItemProvider {
                 listener.removed(this, item);
             }
             items.remove(key);
+            logger.trace("Removed virtual item '{}'", item.getName());
         }
     }
 

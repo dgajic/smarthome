@@ -85,6 +85,7 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.alias("supported-bridge-type-refs", NodeList.class);
         xstream.alias("bridge-type-ref", NodeAttributes.class);
         xstream.alias("item-type", NodeValue.class);
+        xstream.alias("dimension", NodeValue.class);
         xstream.alias("kind", NodeValue.class);
         xstream.alias("label", NodeValue.class);
         xstream.alias("description", NodeValue.class);
@@ -109,6 +110,7 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.alias("properties", NodeList.class);
         xstream.alias("property", NodeValue.class);
         xstream.alias("representation-property", NodeValue.class);
+        xstream.alias("autoUpdatePolicy", NodeValue.class);
     }
 
 }

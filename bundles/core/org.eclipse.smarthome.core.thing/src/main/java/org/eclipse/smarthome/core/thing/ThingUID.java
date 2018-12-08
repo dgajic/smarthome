@@ -94,9 +94,7 @@ public class ThingUID extends UID {
         String[] result = new String[3 + bridgeIds.length];
         result[0] = bindingId;
         result[1] = thingTypeId;
-        for (int i = 0; i < bridgeIds.length; i++) {
-            result[i + 2] = bridgeIds[i];
-        }
+        System.arraycopy(bridgeIds, 0, result, 2, bridgeIds.length);
         result[result.length - 1] = id;
         return result;
     }
@@ -175,12 +173,8 @@ public class ThingUID extends UID {
      * @return list of bridge ids
      */
     public List<String> getBridgeIds() {
-        List<String> bridgeIds = new ArrayList<>();
-        String[] segments = getSegments();
-        for (int i = 2; i < segments.length - 1; i++) {
-            bridgeIds.add(segments[i]);
-        }
-        return bridgeIds;
+        List<String> allSegments = getAllSegments();
+        return allSegments.subList(2, allSegments.size() - 1);
     }
 
     /**
@@ -189,8 +183,8 @@ public class ThingUID extends UID {
      * @return id the id
      */
     public String getId() {
-        String[] segments = getSegments();
-        return segments[segments.length - 1];
+        List<String> segments = getAllSegments();
+        return segments.get(segments.size() - 1);
     }
 
     @Override
